@@ -1,54 +1,64 @@
+# Samson (2016) — GSS 2012 replication
 
-````markdown
-# Replication of Samson (2016)
+TL;DR: Reproduces Samson (2016) analyses on GSS 2012 and produces the replication report and tables (see replication_report.pdf / replication_tables.pdf).
 
-This repository contains the code, documentation, and final report for a replication of Samson (2016), "Support for Immigration Reduction and Physician Distrust in the United States."
-The project reproduces the original analyses using data from the 2012 General Social Survey (GSS).
+Badges: (CI / renv / badges — optional)
 
-## Repository Structure
+Why this repo
+- Reproduces the principal analyses and tables from Samson (2016) using the 2012 General Social Survey (GSS).
+- Demonstrates an end-to-end reproducible research workflow in R: data preparation, principled missing-data handling, variable construction, modeling, and report outputs.
 
-- `code/` – R scripts used for data preparation, imputation, scale construction, and regression analyses
-- `replication_report.pdf` – Final replication report
-- `replication_tables.pdf` – Replication tables
-- `project_diary.pdf` – Documentation of the replication process
-- `Samson2016_originalpaper.pdf` – Original article being replicated
+Methods used
+- Data wrangling and feature engineering with dplyr for reproducible, pipe-based transforms
+- Multiple imputation (predictive mean matching) using mice to address missingness robustly
+- Variable scaling and composite score construction for interpretable effect sizes
+- Linear regression (OLS) and ordinal logistic regression with model diagnostics and comparison across specifications
+- Reproducible pipeline automation via Rscript and Makefile (driver script installs dependencies when needed)
 
-## Software Requirements
+Quick start (from repo root)
+1. Obtain the GSS 2012 data per the GSS terms and save it at the repository root:
+   - Filename: `gss2012.RDS`
+2. Reproduce the full analysis:
+```
+make reproduce
+# or
+Rscript reproduce.R
+```
+3. Clean generated artifacts:
+```
+make clean
+```
 
-- RStudio version 4.4.2
-- Required packages:
-  - `dplyr`
-  - `mice`
-  - `ordinal`
+What’s included
+- `code/` — sequential R scripts implementing the pipeline (01 → 10)
+- `reproduce.R`, `Makefile` — driver and convenience commands to install missing packages and run the pipeline
+- `replication_report.pdf`, `replication_tables.pdf` — replication outputs (report and tables)
+- `Samson2016_originalpaper.pdf` — original paper (for reference)
 
-## Reproducing the Analysis
+Script flow (high level)
+1. `01` — load GSS 2012 and subset variables
+2. `02–04` — recoding, missing-value diagnostics, and table-1 variable creation
+3. `05` — descriptive analyses
+4. `06` — multiple imputation with `mice`
+5. `07` — scaling / variable transforms
+6. `08–10` — produce tables and run OLS / OLR models
 
-### 1. Download the Data
+Requirements
+- R >= 4.4.2 (tested)
+- Required packages: `dplyr`, `mice`, `ordinal` (the driver will install missing packages)
+- The GSS 2012 data file is not included in this repository; obtain it separately and place it as `gss2012.RDS` in the repository root before running.
 
-Download the General Social Survey 2012 data and place it in a folder on your computer.
-Set this folder as your working directory in R.
+Expected outputs
+- `.RDS` intermediate files (mmarks9-PDIR-*.RDS)
+- `.log` files for each script (one per script)
+- `replication_report.pdf` and `replication_tables.pdf` (final outputs / included)
 
-Due to data licensing and repository size considerations, the gss2012.RDS file is not included in this repository.
-Users should obtain the dataset separately and place it in the project directory before running the scripts.
+Contact & citation
+- Meredith Marks — https://github.com/meredithnmarks
+- Cite: Samson (2016). This repository: meredithnmarks/samson2016-gss-replication
 
-### 2. Download the Scripts
-All R scripts are located in the `code/` folder.
-Download all script files into the same folder as the gss2012.RDS file.
-
-1. `mmarks9-PDIR-01-mgmt-setup`
-2. `mmarks9-PDIR-02-mgmt-revcode`
-3. `mmarks9-PDIR-03-mgmt-missval`
-4. `mmarks9-PDIR-04-mgmt-table1var`
-5. `mmarks9-PDIR-05-analysis-desc`
-6. `mmarks9-PDIR-06-mgmt-impute`
-7. `mmarks9-PDIR-07-mgmt-scale`
-8. `mmarks9-PDIR-08-analysis-table1scale`
-9. `mmarks9-PDIR-09-analysis-OLSreg`
-10. `mmarks9-PDIR-10-analysis-OLRreg`
-
-### 3. Install Required Packages
-
-install.packages(c("dplyr", "mice", "ordinal"))
-
-### 4. Run the Scripts
- Run the scripts in the order listed above
+Next improvements (I can add)
+- Add `renv` and commit a lockfile to pin package versions for reproducibility
+- Add a GitHub Actions workflow to run a smoke-check (or conditional reproduce)
+- Add an R Markdown that re-assembles the final report from model outputs
+- Add repository badges and an explicit `LICENSE` if desired
