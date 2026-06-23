@@ -1,4 +1,4 @@
-# Samson (2016) — GSS 2012 replication
+# Samson (2016) Replication— Attitudes Towards Immigration/Physician Distrust — GSS 2012 
 
 TL;DR: Reproduces Samson (2016) analyses on GSS 2012 and produces the replication report and tables (see replication_report.pdf / replication_tables.pdf).
 
