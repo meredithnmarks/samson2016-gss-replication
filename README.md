@@ -2,7 +2,7 @@
 
 TL;DR: Reproduces Samson (2016) analyses on GSS 2012 and produces the replication report and tables (see replication_report.pdf / replication_tables.pdf).
 
-Why this repo
+This project:
 - Reproduces the principal analyses and tables from Samson (2016) using the 2012 General Social Survey (GSS).
 - Demonstrates an end-to-end reproducible research workflow in R: data preparation, principled missing-data handling, variable construction, modeling, and report outputs.
 
